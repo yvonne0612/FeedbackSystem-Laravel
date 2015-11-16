@@ -1,3 +1,12 @@
+<style>
+	.criteria-text { 
+	   position: absolute; 
+	   text-align:center; 
+	   top: 100px; 
+	   width: 100%; 
+	}
+</style>
+
 <section id="page-breadcrumb">
     <div class="vertical-center sun">
          <div class="container">
@@ -15,43 +24,47 @@
 </section>
 <!--/#action-->
 
-<section id="portfolio">
-    <div class="container">
-        <div class="row">
-            <br>
-            <br>
-                
-            <div class="portfolio-items">
-            	@foreach ($tags as $tag)
-    				<div class="col-xs-6 col-sm-4 col-md-3 portfolio-item branded logos">
-                    <div class="portfolio-wrapper">
-                        <div class="portfolio-single">
-                            <div class="portfolio-thumb wow scaleIn" data-wow-duration="500ms" data-wow-delay="300ms">
-                                <div style="background-color:#cb904d; width:261px; height:269px; padding:50px;" >
-                                	<div style="background-color:#00000"></div>
+<section id="blog" class="padding-top padding-bottom">
+        <div class="container">
+            <div class="row">
+                <div class="masonery_area">
+                    @foreach ($tags as $tag)
+                    <div class="col-md-3 col-sm-4">
+                        <div class="single-blog two-column">
+                            <div class="post-thumb">
+                                <a href="blogdetails.html">
+                                    <div style="background-color:tranparent; width:261px; height:269px; padding:50px;" class="frameimg img-responsive">
+                                        <div style="background-color:tranparent; width:161px; height:169px;" class="bgimg img-responsive"> 
+                                        </div>
+                                    </div>
+                                    <h2 class="criteria-text">{{ $tag[0] }}</h2>
+                                    <div class="framecolor" style="display:none">{{ $tag[1] }}</div>
+                                    <div class="bgcolor" style="display:none">{{ $tag[2] }}</div>
+                                </a>
+                                <div class="post-overlay">
+                                    <span class=""><a href="#"><i class="fa fa-hand-o-up"></i></a></span>
                                 </div>
-                                <h2 class="criteria-text">{{ $tag }}</h2>
                             </div>
-                            <div class="portfolio-view">
-                                <ul class="nav nav-pills">
-                                    
-                                    <li><a href="#"><i class="fa fa-volume-down"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-smile-o"></i></a></li>
-                                    <li><a href="images/thankyou.jpg" data-lightbox="example-set"><i class="fa fa-volume-up"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="portfolio-info ">
-                            <h2></h2>
+                            
                         </div>
                     </div>
+                    @endforeach
                 </div>
-				@endforeach
-            
-                
             </div>
-            
-        </div>
     </div>
 </section>
-<!--/#portfolio-->
+
+<script>
+
+	$(document).ready(function(){
+        $('.post-thumb').each(function(){
+            var fcolor = $(this).find('.framecolor').html();
+            var bcolor = $(this).find('.bgcolor').html();
+            alert(fcolor);
+            alert(bcolor);
+            $(this).find('.frameimg').css('background-color', fcolor);
+            $(this).find('.bgimg').css('background-color', bcolor);
+            
+        });
+    });
+</script>

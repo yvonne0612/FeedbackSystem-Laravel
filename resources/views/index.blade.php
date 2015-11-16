@@ -128,6 +128,7 @@
         </div>
     </header>
     <!--/#header-->
+    <input id="curPID" type="text" value="" style="display:none;">
 	<div id="main-container">
     <section id="home-slider">
         <div class="container">
@@ -172,7 +173,7 @@
                     </div>
                     <div class="form-group">
                         <label>Criteria</label><br>
-                        <input type="text" id="criteria" value="Volume,Gesture,Eye Contact,Time Control,Content" data-role="tagsinput"         />
+                        <input type="text" id="criteria" value="Too Loud,No Smile,No Eye Contact,Speak Too Slow" data-role="tagsinput"         />
                         <!--<select multiple data-role="tagsinput" class="form-control" id="criteria">
                           <option value="Volume">Volume</option>
                           <option value="Eye Contact">Eye Contact</option>
@@ -344,11 +345,13 @@
 		});
 	
 		$('#createBtn').click(function(){
-			alert("click detect");
+			//alert("click detect");
 			var title = $('#title').val();
 			var presenter = $('#presenter').val();
 			var criteria = $("#criteria").val();
-			
+			alert(title);
+            alert(presenter);
+            alert(criteria);
 			$.ajax({
     			url: 'create',
     			type: 'POST',
@@ -357,46 +360,60 @@
 					alert("success");
         			$('#createModal').modal('hide'); 
 					$('#pid').html(data);
+                    $('#curPID').val(data);
 					$('#createSuccessModal').modal('show');
     			}
 			});
 			
 		});
 		
+        function getFBForPresenter() {
+            //alert("getFB");
+            var pid = $('#curPID').val()
+            alert(pid);
+            $.ajax({
+                url: 'presenter',
+                type: 'GET',
+                data: {'pid':pid},
+                success: function (data) {
+                    //alert("success");
+                    $('#main-container').html(data);
+                },
+                complete: function() {
+                    // Schedule the next request when the current one's complete
+                    setTimeout(getFBForPresenter, 5000);
+                }
+            });
+        };
+
 		$('#createDoneBtn').click(function(){
-			//$('#createSuccessModal').modal('hide'); 
-			//$('#home-slider').hide();
-			var title = $('#title').val();
-			var criteria = $("#criteria").val();
-			var pid = $('#pid').html();
-			
-			$.ajax({
-    			url: 'presenter',
-    			type: 'GET',
-    			data: {'title': title, 'pid':pid, 'criteria':criteria},
-    			success: function (data) {
-					//alert("success");
-					$('#main-container').html(data);
-    			}
-			});
-			
-					
+			getFBForPresenter();
 		});
-		
-		
+        
+        function getFBForAudience() {
+            //alert("getFB");
+            var pid = $('#curPID').val()
+            alert(pid);
+            $.ajax({
+                url: 'listener',
+                type: 'GET',
+                data: {'pid':pid},
+                success: function (data) {
+                    //alert("success");
+                    $('#main-container').html(data);
+                },
+                complete: function() {
+                    // Schedule the next request when the current one's complete
+                    setTimeout(getFBForAudience, 5000);
+                }
+            });
+        };
+        
 		$('#enterBtn').click(function(){
 			
 			var pid = $("#enterPID").val();
-			
-			$.ajax({
-    			url: 'listener',
-    			type: 'GET',
-    			data: {'pid':pid},
-    			success: function (data) {
-					//alert("success");
-					$('#main-container').html(data);
-    			}
-			});
+            $('#curPID').val(pid);
+			getFBForAudience();
 		});
 		
 		
