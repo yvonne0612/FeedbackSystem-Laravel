@@ -418,7 +418,7 @@
 		
 		
 		
-		$(".thumbs-down").click(function(){
+		/*$(".thumbs-down").click(function(){
 			//alert("thumbs-down");
 			var tag = $(this).parent().parent().parent().parent().find('.criteria-text').html();
 			//var title = $('#fd-title').html();
@@ -447,7 +447,7 @@
 			hr.send(vars); // Actually execute the request
 			
 			
-		});
+		});*/
 		
 	});	
 	</script>

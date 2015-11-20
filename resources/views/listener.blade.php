@@ -32,7 +32,7 @@
                     <div class="col-md-3 col-sm-4">
                         <div class="single-blog two-column">
                             <div class="post-thumb">
-                                <a href="blogdetails.html">
+                                <a class="tag-block" href="#">
                                     <div style="background-color:tranparent; width:261px; height:269px; padding:50px;" class="frameimg img-responsive">
                                         <div style="background-color:tranparent; width:161px; height:169px;" class="bgimg img-responsive"> 
                                         </div>
@@ -57,13 +57,33 @@
 <script>
 
 	$(document).ready(function(){
+        $.ajaxSetup({
+   			headers: { 'X-CSRF-Token' : $('meta[name=_token]').attr('content') }
+		});
+        
         $('.post-thumb').each(function(){
             var fcolor = $(this).find('.framecolor').html();
             var bcolor = $(this).find('.bgcolor').html();
-            alert(fcolor);
-            alert(bcolor);
+            //alert(fcolor);
+            //alert(bcolor);
             $(this).find('.frameimg').css('background-color', fcolor);
             $(this).find('.bgimg').css('background-color', bcolor);
+            
+        });
+        
+        $('.tag-block').click(function(){
+            var pid = $('#fd-session').html();
+            alert(pid);
+            var tagtext = $(this).find('.criteria-text').html();
+            alert(tagtext);
+            $.ajax({
+    			url: 'vote',
+    			type: 'POST',
+    			data: {'pid': pid, 'tag':tagtext},
+    			success: function (data) {
+					alert("vote success");
+    			}
+			});
             
         });
     });

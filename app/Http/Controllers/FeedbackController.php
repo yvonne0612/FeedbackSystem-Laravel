@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use DB;
 use Input;
-use Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class FeedbackController extends Controller
 {
@@ -52,8 +53,9 @@ class FeedbackController extends Controller
 		return view('presenter', ['title' => $title, 'pid' => $pid, 'tags' => $tag_fb] );
     }
 	
-	public function listener()
+	public function listener(Request $request)
     {
+        $lid = $request->cookie('lid');
 		$pid = Input::get( 'pid' );
 		$title = "";
 		$presenter = "";
@@ -70,7 +72,7 @@ class FeedbackController extends Controller
         $tag_fb = array();
         foreach ($tags_arr as $tag_content) {
             $fb_count = DB::select('SELECT * FROM (SELECT id, listener_id, feedback, submission_date FROM feedback_detail WHERE session_id = ? AND tag_name= ? ORDER BY submission_date DESC) AS tmp_table GROUP BY listener_id',[$pid, $tag_content]);
-            $total_count = 10;
+            $total_count = 5;
             $fb_count_int = count($fb_count);
             $frame_color = substr(md5($tag_content), 12, 6);
             $percent = 1-$fb_count_int/$total_count;
@@ -87,7 +89,26 @@ class FeedbackController extends Controller
             $tag_fb[] = $cur_pair;
         }
         //return $tag_fb[0][0].$tag_fb[0][1].$tag_fb[0][2];
-		return view('listener', ['title' => $title, 'pid' => $pid, 'presenter' => $presenter, 'tags' => $tag_fb]);
+		//return view('listener', ['title' => $title, 'pid' => $pid, 'presenter' => $presenter, 'tags' => $tag_fb]);
+        if(count($lid)==0){
+            $lid = md5(uniqid(rand(), true));
+            DB::insert('insert into listener_info (id,session_id) values (?, ?)', [$lid, $pid]);
+        }
+        $response = new Response(view('listener', ['title' => $title, 'pid' => $pid, 'presenter' => $presenter, 'tags' => $tag_fb]));
+        $response->withCookie(cookie('lid', $lid, 10));
+        return $response;
+        
+    }
+    
+    public function vote(Request $request)
+    {
+        $lid = $request->cookie('lid');
+		$pid = Input::get( 'pid' );
+		$tag = Input::get( 'tag' );
+		$feedback = "bad";
+		DB::insert('insert into feedback_detail (listener_id,session_id,tag_name,feedback) values (?, ?, ?, ?)', [$lid, $pid, $tag,$feedback]);
+		
+		return $pid;
     }
     
         

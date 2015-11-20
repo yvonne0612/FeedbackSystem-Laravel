@@ -21,7 +21,7 @@ Route::get('child', function () {
 });
 
 Route::post('create', 'FeedbackController@create');
-
+Route::post('vote', 'FeedbackController@vote');
 Route::get('presenter', 'FeedbackController@presenter');
 Route::get('listener', 'FeedbackController@listener');
 
