@@ -48,21 +48,6 @@
 
 <body>
 	<header id="header">      
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-12 overflow">
-                   <div class="social-icons pull-right">
-                        <ul class="nav nav-pills">
-                            <li><a href=""><i class="fa fa-facebook"></i></a></li>
-                            <li><a href=""><i class="fa fa-twitter"></i></a></li>
-                            <li><a href=""><i class="fa fa-google-plus"></i></a></li>
-                            <li><a href=""><i class="fa fa-dribbble"></i></a></li>
-                            <li><a href=""><i class="fa fa-linkedin"></i></a></li>
-                        </ul>
-                    </div> 
-                </div>
-             </div>
-        </div>
         <div class="navbar navbar-inverse" role="banner">
             <div class="container">
                 <div class="navbar-header">
@@ -78,52 +63,7 @@
                     </a>
                     
                 </div>
-                <div class="collapse navbar-collapse">
-                    <ul class="nav navbar-nav navbar-right">
-                        <li class="active"><a href="index.html">Home</a></li>
-                        <li class="dropdown"><a href="#">Pages <i class="fa fa-angle-down"></i></a>
-                            <ul role="menu" class="sub-menu">
-                                <li><a href="aboutus.html">About</a></li>
-                                <li><a href="aboutus2.html">About 2</a></li>
-                                <li><a href="service.html">Services</a></li>
-                                <li><a href="pricing.html">Pricing</a></li>
-                                <li><a href="contact.html">Contact us</a></li>
-                                <li><a href="contact2.html">Contact us 2</a></li>
-                                <li><a href="404.html">404 error</a></li>
-                                <li><a href="coming-soon.html">Coming Soon</a></li>
-                            </ul>
-                        </li>                    
-                        <li class="dropdown"><a href="blog.html">Blog <i class="fa fa-angle-down"></i></a>
-                            <ul role="menu" class="sub-menu">
-                                <li><a href="blog.html">Blog Default</a></li>
-                                <li><a href="blogtwo.html">Timeline Blog</a></li>
-                                <li><a href="blogone.html">2 Columns + Right Sidebar</a></li>
-                                <li><a href="blogthree.html">1 Column + Left Sidebar</a></li>
-                                <li><a href="blogfour.html">Blog Masonary</a></li>
-                                <li><a href="blogdetails.html">Blog Details</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown"><a href="portfolio.html">Portfolio <i class="fa fa-angle-down"></i></a>
-                            <ul role="menu" class="sub-menu">
-                                <li><a href="portfolio.html">Portfolio Default</a></li>
-                                <li><a href="portfoliofour.html">Isotope 3 Columns + Right Sidebar</a></li>
-                                <li><a href="portfolioone.html">3 Columns + Right Sidebar</a></li>
-                                <li><a href="portfoliotwo.html">3 Columns + Left Sidebar</a></li>
-                                <li><a href="portfoliothree.html">2 Columns</a></li>
-                                <li><a href="portfolio-details.html">Portfolio Details</a></li>
-                            </ul>
-                        </li>                         
-                        <li><a href="shortcodes.html ">Shortcodes</a></li>                    
-                    </ul>
-                </div>
-                <div class="search">
-                    <form role="form">
-                        <i class="fa fa-search"></i>
-                        <div class="field-toggle">
-                            <input type="text" class="search-form" autocomplete="off" placeholder="Search">
-                        </div>
-                    </form>
-                </div>
+                
             </div>
         </div>
     </header>
@@ -137,7 +77,7 @@
                     <div class="slide-text">
                         <h1>We Provide Feedback :D</h1>
                         <p>Get real time feedback for your presentation based on customized criteria!</p>
-                        <a href="#" class="btn btn-common" style="width: 100px;" data-toggle="modal" data-target="#createModal">Create</a><br>
+                        <a href="#" class="btn btn-common" style="width: 100px;" data-toggle="modal" data-target="#authModal">Create</a><br>
                         <a href="#" class="btn btn-common" style="width: 100px;" data-toggle="modal" data-target="#enterModal">Enter</a>
                     </div>
                     <img src="images/home/slider/hill.png" class="slider-hill" alt="slider image">
@@ -155,6 +95,32 @@
     </div>
     
     <!-- Modal -->
+    <div class="modal fade" id="authModal" tabindex="-1" role="dialog" aria-labelledby="authModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Tell Us Who You Are</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input id="email" class="form-control" placeholder="Enter your email">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="proceedBtn">Proceed</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+    
+    
+    <!-- Modal -->
     <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -163,6 +129,10 @@
                     <h4 class="modal-title">New Presentation</h4>
                 </div>
                 <div class="modal-body">
+                    <div class="form-group">
+                        <label for="disabledSelect">Email</label>
+                        <input class="form-control" id="disabledEmail" type="text" placeholder="Disabled input" disabled>
+                    </div>
                     <div class="form-group">
                         <label>Title</label>
                         <input id="title" class="form-control" placeholder="Enter presentation title">
@@ -173,7 +143,7 @@
                     </div>
                     <div class="form-group">
                         <label>Criteria</label><br>
-                        <input type="text" id="criteria" value="Too Loud,No Smile,No Eye Contact,Speak Too Slow" data-role="tagsinput"         />
+                        <input type="text" id="criteria" value="" data-role="tagsinput"         />
                         <!--<select multiple data-role="tagsinput" class="form-control" id="criteria">
                           <option value="Volume">Volume</option>
                           <option value="Eye Contact">Eye Contact</option>
@@ -343,21 +313,39 @@
 		$.ajaxSetup({
    			headers: { 'X-CSRF-Token' : $('meta[name=_token]').attr('content') }
 		});
-	
+        
+        $('#proceedBtn').click(function(){
+            var email = $('#email').val();
+            $.ajax({
+                url: 'auth',
+    			type: 'GET',
+    			data: {'email': email},
+    			success: function (data) {
+                    $('#criteria').tagsinput('add', data);
+                    $('#email').val('');
+                    $('#authModal').modal('hide'); 
+                    $('#disabledEmail').val(email);
+        			$('#createModal').modal('show'); 
+    			}
+			});
+       
+        });
+       
 		$('#createBtn').click(function(){
-			//alert("click detect");
+			alert("click detect");
 			var title = $('#title').val();
 			var presenter = $('#presenter').val();
 			var criteria = $("#criteria").val();
-			alert(title);
-            alert(presenter);
-            alert(criteria);
+            var email =  $('#disabledEmail').val();
 			$.ajax({
     			url: 'create',
     			type: 'POST',
-    			data: {'title': title, 'presenter':presenter, 'criteria':criteria},
+    			data: {'title': title, 'presenter':presenter, 'criteria':criteria, 'email':email},
     			success: function (data) {
-					alert("success");
+                    alert("back");
+					$('#title').val('');
+                    $('#presenter').val('');
+                    $('#criteria').tagsinput('removeAll');
         			$('#createModal').modal('hide'); 
 					$('#pid').html(data);
                     $('#curPID').val(data);
@@ -418,36 +406,13 @@
 		
 		
 		
-		/*$(".thumbs-down").click(function(){
-			//alert("thumbs-down");
-			var tag = $(this).parent().parent().parent().parent().find('.criteria-text').html();
-			//var title = $('#fd-title').html();
-			//var presenter = $('#fd-presenter').html();
-			var session_id = $('#fd-session').html();
-			alert(tag);
-			// Create our XMLHttpRequest object
-			var hr = new XMLHttpRequest();
-			// Create some variables we need to send to our PHP file
-			var url = "sendFb.php";
-			
-			var vars = "feedback=bad&session_id="+session_id+"&tag_name="+tag;
-			hr.open("POST", url, true);
-			// Set content type header information for sending url encoded variables in the request
-			hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-			// Access the onreadystatechange event for the XMLHttpRequest object
-			hr.onreadystatechange = function() {
-				if(hr.readyState == 4 && hr.status == 200) {
-					//var return_data = hr.responseText;
-					//$('#createModal').modal('hide'); 
-					//$('#pid').html(return_data);
-					//$('#createSuccessModal').modal('show'); 
-				}
-			}
-			// Send the data to PHP now... and wait for response to update the status div
-			hr.send(vars); // Actually execute the request
-			
-			
-		});*/
+		$('#email').keypress(function (e) {
+            if (e.which == 13) {
+                alert("aha");
+                return false;    //<---- Add this line
+            }
+        });
+
 		
 	});	
 	</script>

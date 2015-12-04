@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use DB;
+use Mail;
 use Input;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -10,21 +11,36 @@ use Illuminate\Http\Response;
 
 class FeedbackController extends Controller
 {
-    /**
-     * Show the profile for the given user.
-     *
-     * @param  int  $id
-     * @return Response
-     */
+    
+    public function auth()
+    {   
+        $tags = "Too Loud,No Smile,No Eye Contact,Speak Too Slow";
+        $email = Input::get( 'email' );
+		$histories = DB::select('select * from presenter_history where id = ?', [$email]);
+        foreach ($histories as $history) {
+    		 $tags = $history->tags;
+		}
+		
+		return $tags;
+    }
+    
+    
     public function create()
     {
         $title = Input::get( 'title' );
 		$presenter = Input::get( 'presenter' );
 		$criteria = Input::get( 'criteria' );
+        $email = Input::get( 'email' );
+        
 		$pid = md5(uniqid(rand(), true));
 		
 		DB::insert('insert into presenter_info (id,presenter_name,presentation_title,tags) values (?, ?, ?, ?)', [$pid, $presenter, $title, $criteria]);
-		
+		DB::statement('replace into presenter_history (id,tags) values (?, ?)', [$email, $criteria]);
+        
+        /*Mail::send('notification', ['presenter'=>$presenter, 'pid'=>$pid, 'title'=>$title, 'criteria'=>$criteria], function($message) {
+            $message->to('jodie.d.zhao@gmail.com', 'Jodie')->subject('New Presentation ID');
+        });*/
+        
 		return $pid;
     }
 	

@@ -20,6 +20,7 @@ Route::get('child', function () {
 	return view('child');
 });
 
+Route::get('auth', 'FeedbackController@auth');
 Route::post('create', 'FeedbackController@create');
 Route::post('vote', 'FeedbackController@vote');
 Route::get('presenter', 'FeedbackController@presenter');
