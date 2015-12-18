@@ -58,10 +58,21 @@
                         <span class="icon-bar"></span>
                     </button>
 
-                    <a class="navbar-brand" href="index.html">
+                    <a class="navbar-brand" href="/">
                     	<h1><img src="images/logo.png" alt="logo"></h1>
                     </a>
                     
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right">                        
+                        <li><a href="/">Exit</a></li>  
+                        
+                    </ul>
+                </div>
+                <div class="search">
+                    <form role="form">
+                        <i class="fa fa-sign-out"></i>
+                    </form>
                 </div>
                 
             </div>
@@ -192,6 +203,8 @@
         <!-- /.modal-dialog -->
     </div>
     <!-- /.modal -->
+
+    
     
     <!-- Modal -->
     <div class="modal fade" id="enterModal" tabindex="-1" role="dialog" aria-labelledby="enterModalLabel" aria-hidden="true">
@@ -206,6 +219,16 @@
                         <label>Presentation ID</label>
                         <input id="enterPID" class="form-control" placeholder="Enter presentation ID">
                     </div>
+                    <div class="form-group">
+                        <label>Inline Radio Buttons</label><br>
+                        <label class="radio-inline">
+                            <input type="radio" name="enterAs" value="presenter" >Presenter
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="enterAs" value="listener" checked>Listener
+                        </label>
+                    </div>
+                    
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -332,17 +355,18 @@
         });
        
 		$('#createBtn').click(function(){
-			alert("click detect");
+			//alert("click detect");
 			var title = $('#title').val();
 			var presenter = $('#presenter').val();
 			var criteria = $("#criteria").val();
             var email =  $('#disabledEmail').val();
+            //alert(email);
 			$.ajax({
     			url: 'create',
     			type: 'POST',
     			data: {'title': title, 'presenter':presenter, 'criteria':criteria, 'email':email},
     			success: function (data) {
-                    alert("back");
+                    //alert("back");
 					$('#title').val('');
                     $('#presenter').val('');
                     $('#criteria').tagsinput('removeAll');
@@ -358,7 +382,7 @@
         function getFBForPresenter() {
             //alert("getFB");
             var pid = $('#curPID').val()
-            alert(pid);
+            //alert(pid);
             $.ajax({
                 url: 'presenter',
                 type: 'GET',
@@ -381,7 +405,7 @@
         function getFBForAudience() {
             //alert("getFB");
             var pid = $('#curPID').val()
-            alert(pid);
+            //alert(pid);
             $.ajax({
                 url: 'listener',
                 type: 'GET',
@@ -397,18 +421,55 @@
             });
         };
         
-		$('#enterBtn').click(function(){
+        
+        function validatePID(a,b) {
+            var pid = a;
+            var role = b;
+            
+            $.ajax({
+                url: 'validatePID',
+                type: 'GET',
+                data: {'pid':pid},
+                success: function (data) {
+                    var num = parseInt(data);
+                    if(num>0){
+                        $('#curPID').val(pid);
+                        if(role=="listener")
+                            getFBForAudience();
+                        else
+                            getFBForPresenter();
+                    }else{
+                        alert("invalid PID entered");
+                    }
+                        
+                }
+            });
+            
+        };
+        
+		/*$('#enterBtn').click(function(){
 			
 			var pid = $("#enterPID").val();
             $('#curPID').val(pid);
-			getFBForAudience();
+            var role = $("input[name=enterAs]:checked").val();
+            //validatePID(pid, role);
+            if(role=="listener")
+                getFBForAudience();
+            else
+                getFBForPresenter();
+		});*/
+        $('#enterBtn').click(function(){
+			
+			var pid = $("#enterPID").val();
+            
+            var role = $("input[name=enterAs]:checked").val();
+            validatePID(pid, role);
 		});
 		
 		
 		
 		$('#email').keypress(function (e) {
             if (e.which == 13) {
-                alert("aha");
                 return false;    //<---- Add this line
             }
         });

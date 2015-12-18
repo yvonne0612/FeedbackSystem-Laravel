@@ -24,6 +24,17 @@ class FeedbackController extends Controller
 		return $tags;
     }
     
+    public function ifvalid()
+    {   
+        $pid = Input::get( 'pid' );
+        $presentations = DB::select('select * from presenter_info where id = ?', [$pid]);
+        return count($presentations);
+        /*if(count($presentations)>0)
+            return true;
+        else
+            return false;*/
+    }
+    
     
     public function create()
     {
@@ -31,15 +42,19 @@ class FeedbackController extends Controller
 		$presenter = Input::get( 'presenter' );
 		$criteria = Input::get( 'criteria' );
         $email = Input::get( 'email' );
-        
 		$pid = md5(uniqid(rand(), true));
 		
 		DB::insert('insert into presenter_info (id,presenter_name,presentation_title,tags) values (?, ?, ?, ?)', [$pid, $presenter, $title, $criteria]);
 		DB::statement('replace into presenter_history (id,tags) values (?, ?)', [$email, $criteria]);
         
-        /*Mail::send('notification', ['presenter'=>$presenter, 'pid'=>$pid, 'title'=>$title, 'criteria'=>$criteria], function($message) {
-            $message->to('jodie.d.zhao@gmail.com', 'Jodie')->subject('New Presentation ID');
-        });*/
+        Mail::send('notification', ['presenter'=>$presenter, 'pid'=>$pid, 'title'=>$title, 'criteria'=>$criteria], function ($message) {
+
+            $message->from('jodie.d.zhao@gmail.com', 'Feedback Team');
+
+            $message->to(Input::get( 'email' ))->subject('New Presentation ID');
+            //can only use Input::get( 'email' ) but not $email
+
+        });
         
 		return $pid;
     }
@@ -60,10 +75,30 @@ class FeedbackController extends Controller
 		$tags_arr = explode(",", $tags);
         $tag_fb = array();
         foreach ($tags_arr as $tag_content) {
-            $fb_count = DB::select('SELECT * FROM (SELECT id, listener_id, feedback, submission_date FROM feedback_detail WHERE session_id = ? AND tag_name= ? ORDER BY submission_date DESC) AS tmp_table GROUP BY listener_id',[$pid, $tag_content]);
+            /*$fb_count = DB::select('SELECT * FROM (SELECT id, listener_id, feedback, submission_date FROM feedback_detail WHERE session_id = ? AND tag_name= ? ORDER BY submission_date DESC) AS tmp_table GROUP BY listener_id',[$pid, $tag_content]);
             $total_count = 10;
-            $fb_count_int = count($fb_count);
-            $cur_pair = array($tag_content,($fb_count_int/$total_count)*100);
+            $fb_count_int = count($fb_count);*/
+            $fb_count = DB::select('SELECT listener_id, COUNT(*) as vote_count FROM feedback_detail WHERE session_id = ? AND tag_name= ? AND submission_date >= NOW() - INTERVAL 5 MINUTE GROUP BY listener_id',[$pid, $tag_content]);
+            
+            $fb_count_int = 0;
+            foreach ($fb_count as $fb_count_val) {
+                $cur_vote_count = (int)$fb_count_val->vote_count;
+                if($cur_vote_count>5){
+                    $fb_count_int = $fb_count_int+5;
+                }else{
+                    $fb_count_int = $fb_count_int+$cur_vote_count;
+                }
+                    
+            }
+            
+            $listeners_count = DB::select('SELECT * FROM listener_info WHERE session_id = ?',[$pid]);
+            $listeners_count_int = count($listeners_count);
+            if($listeners_count_int==0){
+                $listeners_count_int = 1;
+            }
+            
+            $cur_pair = array($tag_content,($fb_count_int*100/($listeners_count_int*5)));
+            //$cur_pair = array($tag_content,($fb_count_int*100/$total_count));
             $tag_fb[] = $cur_pair;
         }
 		return view('presenter', ['title' => $title, 'pid' => $pid, 'tags' => $tag_fb] );
@@ -87,11 +122,27 @@ class FeedbackController extends Controller
 		$tags_arr = explode(",", $tags);
         $tag_fb = array();
         foreach ($tags_arr as $tag_content) {
-            $fb_count = DB::select('SELECT * FROM (SELECT id, listener_id, feedback, submission_date FROM feedback_detail WHERE session_id = ? AND tag_name= ? ORDER BY submission_date DESC) AS tmp_table GROUP BY listener_id',[$pid, $tag_content]);
-            $total_count = 5;
-            $fb_count_int = count($fb_count);
+            #$fb_count = DB::select('SELECT * FROM (SELECT id, listener_id, feedback, submission_date FROM feedback_detail WHERE session_id = ? AND tag_name= ? ORDER BY submission_date DESC) AS tmp_table GROUP BY listener_id',[$pid, $tag_content]);
+            $fb_count = DB::select('SELECT listener_id, COUNT(*) as vote_count FROM feedback_detail WHERE session_id = ? AND tag_name= ? AND submission_date >= NOW() - INTERVAL 5 MINUTE GROUP BY listener_id',[$pid, $tag_content]);
+            $fb_count_int = 0;
+            foreach ($fb_count as $fb_count_val) {
+                $cur_vote_count = (int)$fb_count_val->vote_count;
+                if($cur_vote_count>5){
+                    $fb_count_int = $fb_count_int+5;
+                }else{
+                    $fb_count_int = $fb_count_int+$cur_vote_count;
+                }
+                    
+            }
+            
+            $listeners_count = DB::select('SELECT * FROM listener_info WHERE session_id = ?',[$pid]);
+            $listeners_count_int = count($listeners_count);
+            if($listeners_count_int==0){
+                $listeners_count_int = 1;
+            }
+            //$fb_count_int = count($fb_count);
             $frame_color = substr(md5($tag_content), 12, 6);
-            $percent = 1-$fb_count_int/$total_count;
+            $percent = 1-$fb_count_int/($listeners_count_int*5);
             $t=$percent<0?0:255;
             $p=$percent<0?$percent*-1:$percent;
             $RGB = str_split($frame_color, 2);

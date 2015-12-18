@@ -73,15 +73,15 @@
         
         $('.tag-block').click(function(){
             var pid = $('#fd-session').html();
-            alert(pid);
+            //alert(pid);
             var tagtext = $(this).find('.criteria-text').html();
-            alert(tagtext);
+            //alert(tagtext);
             $.ajax({
     			url: 'vote',
     			type: 'POST',
     			data: {'pid': pid, 'tag':tagtext},
     			success: function (data) {
-					alert("vote success");
+					//alert("vote success");
     			}
 			});
             
