@@ -18,9 +18,15 @@ Route::get('/', function () {
 
 Route::get('validatePID', 'FeedbackController@ifvalid');
 Route::get('auth', 'FeedbackController@auth');
+Route::post('toCreate', 'FeedbackController@toCreate');
 Route::post('create', 'FeedbackController@create');
 Route::post('vote', 'FeedbackController@vote');
 Route::get('presenter', 'FeedbackController@presenter');
 Route::get('listener', 'FeedbackController@listener');
-
+Route::get('history', 'FeedbackController@history');
+/*get('/email', function(){
+    Mail::send('email.test', ['name' => 'test'], functon($message){
+        $message->to('yuanyuan920612@gmail.com', 'Some guy')->subject('test!');
+    });
+});*/
 

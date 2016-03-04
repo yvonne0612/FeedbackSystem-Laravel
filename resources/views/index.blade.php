@@ -80,6 +80,7 @@
     </header>
     <!--/#header-->
     <input id="curPID" type="text" value="" style="display:none;">
+    <input id="idList" type="text" value="" style="display:none;">
 	<div id="main-container">
     <section id="home-slider">
         <div class="container">
@@ -88,8 +89,8 @@
                     <div class="slide-text">
                         <h1>We Provide Feedback :D</h1>
                         <p>Get real time feedback for your presentation based on customized criteria!</p>
-                        <a href="#" class="btn btn-common" style="width: 100px;" data-toggle="modal" data-target="#authModal">Create</a><br>
-                        <a href="#" class="btn btn-common" style="width: 100px;" data-toggle="modal" data-target="#enterModal">Enter</a>
+                        <a href="#" class="btn btn-common" style="width: 250px;" data-toggle="modal" data-target="#authModal">New Presentation/Past Records</a><br>
+                        <a href="#" class="btn btn-common" style="width: 250px;" data-toggle="modal" data-target="#enterModal">Check/Provide Feedback</a>
                     </div>
                     <img src="images/home/slider/hill.png" class="slider-hill" alt="slider image">
                     <img src="images/home/slider/house.png" class="slider-house" alt="slider image">
@@ -129,8 +130,112 @@
         <!-- /.modal-dialog -->
     </div>
     <!-- /.modal -->
-    
-    
+
+
+
+
+    <!-- /.modal -->
+    <div class="modal fade" id="createOrHistoryModal" tabindex="-1" role="dialog" aria-labelledby="createOrHistoryModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" style = "align-content: center">Welcome!</h4>
+                </div>
+                <div class="modal-body">
+
+
+
+                    <!--
+                    <div class="form-group">
+                        <label>Criteria</label><br>
+                        <input type="text" id="criteria" value="" data-role="tagsinput"         />
+                          <select multiple data-role="tagsinput" class="form-control" id="criteria">
+                          <option value="Volume">Volume</option>
+                          <option value="Eye Contact">Eye Contact</option>
+                          <option value="Gesture">Gesture</option>
+                          <option value="Time Control">Time Control</option>
+                          <option value="Content">Content</option>
+                        </select>
+                    </div>-->
+
+
+
+
+
+                    <div class="form-group">
+                        <label for="disabledSelect">Email</label>
+                        <input class="form-control" id="disabledEmail" type="text" placeholder="Disabled input" disabled>
+                        <input id="idList2" type="text" value="" style="display:none;" >
+
+                    </div>
+
+
+
+                    <div>
+                        <h2 style="align-self: center;">Hi presenter, please choose the action you want to perform</h2>
+                        <button type="button" class="btn btn-default"  style="width: 350px;" id="toCreateBtn">Create a new presentation</button><br><br>
+                        <button type="button" class="btn btn-default"  style="width: 350px;" id="showHistoryBtn">See my previous presentation</button>
+                    </div>
+
+
+
+
+
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+
+
+
+
+
+
+    <!-- /.modal -->
+    <div class="modal fade" id="historyModal" tabindex="-1" role="dialog" aria-labelledby="historyModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <!--<div class="col-sm-3 wow fadeInUp" data-wow-duration="500ms" data-wow-delay="300ms">-->
+                    <div class="feature-inner">
+                        <div class="icon-wrapper">
+                            <i class="fa fa-2x fa-check-square-o"></i>
+                        </div>
+
+                        <!-- something not sure here -->
+                        <div class="form-group">
+                            <label for="disabledSelect">Email</label>
+                            <input class="form-control" id="disabledEmail" type="text" placeholder="Disabled input" disabled>
+                        </div>
+                        <!-- something not sure here -->
+
+                        <!--<h2 id="idlist"></h2>-->
+                        <h2>Below are history of previous presentations created</h2>
+                        <ul class="pin-ul">
+
+                        </ul>
+                    </div>
+                    <!--</div>-->
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+
+
+
+
     <!-- Modal -->
     <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -174,6 +279,17 @@
         <!-- /.modal-dialog -->
     </div>
     <!-- /.modal -->
+
+
+
+
+
+
+
+
+
+
+
     
     <!-- Modal -->
     <div class="modal fade" id="createSuccessModal" tabindex="-1" role="dialog" aria-labelledby="createSuccessModalLabel" aria-hidden="true">
@@ -222,10 +338,10 @@
                     <div class="form-group">
                         <label>Inline Radio Buttons</label><br>
                         <label class="radio-inline">
-                            <input type="radio" name="enterAs" value="presenter" >Presenter
+                            <input type="radio" name="enterAs" value="presenter" >Check Feedback
                         </label>
                         <label class="radio-inline">
-                            <input type="radio" name="enterAs" value="listener" checked>Listener
+                            <input type="radio" name="enterAs" value="listener" checked>Provide Feedback
                         </label>
                     </div>
                     
@@ -339,6 +455,8 @@
         
         $('#proceedBtn').click(function(){
             var email = $('#email').val();
+            alert("inside proceedBtn "+email);
+
             $.ajax({
                 url: 'auth',
     			type: 'GET',
@@ -346,12 +464,73 @@
     			success: function (data) {
                     $('#criteria').tagsinput('add', data);
                     $('#email').val('');
-                    $('#authModal').modal('hide'); 
+                    $('#authModal').modal('hide');
                     $('#disabledEmail').val(email);
-        			$('#createModal').modal('show'); 
-    			}
+                    $('#createOrHistoryModal').modal('show');
+
+                }
 			});
-       
+            alert("end of proceedBtn");
+
+
+        });
+
+        $('#toCreateBtn').click(function(){
+            var email =  $('#disabledEmail').val();
+            $.ajax({
+                url:'toCreate',
+                type: 'POST',
+                data: {'email': email},
+                success: function (data) {
+                $('#createOrHistoryModal').modal('hide');
+                $('#createModal').modal('show');
+            // $('#createModal').modal("show").on('hide', function() {
+            //   $('#createOrHistoryModal').modal('hide')
+            //});
+            }
+        });
+
+        });
+
+        $('#showHistoryBtn').click(function(){
+            alert("click submitted, work in progress!");
+            //$('#createOrHistoryModal').modal('hide');
+            //$('#createModal').modal('show');
+            //var idarr = $('#idarr').val();
+            /*var email =  $('#disabledEmail').val();
+            $.ajax({
+                url: 'getList',
+                type: 'GET',
+                data: {'email':email},
+                success: function (data) {
+                    alert(data);
+                   // $('#title').val('');
+                   // $('#presenter').val('');
+                   // $('#criteria').tagsinput('removeAll');
+                    $('#createOrHistoryModal').modal('hide');
+                   // $('#pid').html(data);
+                    $('#idList').val(data);
+                    $('#idList2').val(data);
+                    $('#historyModal').modal('show');
+                }
+            });*/
+            //showHistory();
+            alert("inside showHistory");
+            var uri = $('#disabledEmail').val();
+            var email =  encodeURI(uri);
+            //var email = "yuanyuan920612gmail.com"
+            alert("email get is: "+email);
+            $.ajax({
+                url: 'history',
+                type: 'GET',
+                data: {'email': email},
+                success: function (data) {
+                    alert("success");
+                    $('#createOrHistoryModal').modal('hide');
+                    $('#main-container').html(data);
+                }
+            });
+
         });
        
 		$('#createBtn').click(function(){
@@ -420,7 +599,10 @@
                 }
             });
         };
-        
+/*
+        function showHistory(){
+
+        };*/
         
         function validatePID(a,b) {
             var pid = a;

@@ -81,7 +81,7 @@
     			type: 'POST',
     			data: {'pid': pid, 'tag':tagtext},
     			success: function (data) {
-					//alert("vote success");
+					alert("vote success");
     			}
 			});
             

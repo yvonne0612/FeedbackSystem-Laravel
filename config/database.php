@@ -54,14 +54,15 @@ return [
 
         'mysql' => [
             'driver'    => 'mysql',
-            'host'      => 'localhost',
+            'host'      => '127.0.0.1',
             'database'  => 'feedbacksys',
-            'username'  => 'ding',
-            'password'  => '151015',
+            'username'  => 'root',
+            'password'  => '920612',
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix'    => '',
             'strict'    => false,
+            'unix_socket' => '/tmp/mysql.sock'
         ],
 
         'pgsql' => [
